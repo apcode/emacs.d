@@ -29,6 +29,7 @@
 (package-initialize)
 (require 'package)
 (add-to-list 'load-path "~/.emacs.d/use-package")
+(add-to-list 'load-path "~/.emacs.d/my-packages")
 (require 'use-package)
 (add-to-list 'package-archives
      '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -44,6 +45,22 @@
 
 
 ;; PACKAGES
+(use-package auctex
+  :init
+  (progn
+    (setq TeX-auto-save t)
+    (setq TeX-parse-self t)
+    (setq-default TeX-master nil)
+    (setq TeX-PDF-mode t)
+    (setq reftex-plug-into-AUCTeX t))
+  :config
+  (progn
+    (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+    (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+    (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+    (add-hook 'LaTeX-mode-hook 'turn-on-reftex))
+  :defer t)
+
 (use-package smex
   :bind (("M-x" . smex)
          ("M-X" . smex-major-mode-commands)))
@@ -155,6 +172,10 @@
   :ensure t
   :init (global-flycheck-mode))
 
+;; non-elpa el files
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
 ;; line utils
 (defun duplicate-line()
   (interactive)
@@ -192,6 +213,7 @@
 (add-to-list 'auto-mode-alist '("WORKSPACE" . python-mode))
 
 (setq inhibit-startup-screen t)
+(add-to-list 'initial-frame-alist '(fullscreen . fullscreen))
 
 ;; General
 (setq-default indent-tabs-mode nil)
@@ -215,7 +237,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
+    (auctex flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
