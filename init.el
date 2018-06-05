@@ -14,7 +14,7 @@
 ;;   See http://dominik.honnef.co/posts/2013/03/writing_go_in_emacs/
 ;;
 ;; go get golang.org/x/tools/cmd/goimports
-;; go get github.com/rogpeppe/godef
+;; go get github.com/rogpeppe/godefgo get github.com/rogpeppe/godef
 ;; go get -u github.com/nsf/gocode
 ;; go get -u github.com/kisielk/errcheck
 ;; go get golang.org/x/tools/cmd/guru
@@ -63,61 +63,61 @@
 
 (use-package smex
   :bind (("M-x" . smex)
-         ("M-X" . smex-major-mode-commands)))
+   ("M-X" . smex-major-mode-commands)))
 
 (use-package ido
   :config (progn
-            (ido-everywhere t)
-            (ido-mode t)))
+      (ido-everywhere t)
+      (ido-mode t)))
 
 (use-package ibuffer
   :defer t
   :bind ("C-x C-b" . ibuffer)
   :config (add-hook 'ibuffer-mode-hook
-                    (lambda ()
-                      (ibuffer-switch-to-saved-filter-groups "default"))))
+        (lambda ()
+          (ibuffer-switch-to-saved-filter-groups "default"))))
 
 (setq ibuffer-saved-filter-groups
       (quote (("default"
-               ("emacs" (or
-                         (name . "^\\*scratch\\*$")
-                         (name . "^\\*Messages\\*$")
-                         (name . ".*\\.el$")))
-               ("build" (or
-                         (name . "BUILD")
-                         (name . "WORKSPACE")))
-               ("proto" (name . ".*\\.proto$"))
-               ("dired" (mode . dired-mode))
-               ("h" (or
-                     (name . ".*\\.h$")
-                     (name . ".*\\.hpp$")))
-               ("cc" (or
-                      (name . ".*\\.cpp$")
-                      (name . ".*\\.cc$")
-                      (name . ".*\\.c$")))
-               ("py" (mode . "python-mode"))
-               ("go" (name . ".*\\.go$"))))))
+         ("emacs" (or
+       (name . "^\\*scratch\\*$")
+       (name . "^\\*Messages\\*$")
+       (name . ".*\\.el$")))
+         ("build" (or
+       (name . "BUILD")
+       (name . "WORKSPACE")))
+         ("proto" (name . ".*\\.proto$"))
+         ("dired" (mode . dired-mode))
+         ("h" (or
+         (name . ".*\\.h$")
+         (name . ".*\\.hpp$")))
+         ("cc" (or
+          (name . ".*\\.cpp$")
+          (name . ".*\\.cc$")
+          (name . ".*\\.c$")))
+         ("py" (mode . "python-mode"))
+         ("go" (name . ".*\\.go$"))))))
 
 (use-package ace-jump-mode
   :bind ("C-;" . ace-jump-mode))
 
 (use-package exec-path-from-shell
   :config (progn
-            (exec-path-from-shell-initialize)
-            (exec-path-from-shell-copy-env "GOPATH")))
+      (exec-path-from-shell-initialize)
+      (exec-path-from-shell-copy-env "GOPATH")))
 
 (use-package auto-complete
   :config (progn
-            (ac-config-default)
-            (global-auto-complete-mode)))
+      (ac-config-default)
+      (global-auto-complete-mode)))
 
 (setq clang-format-style-option "Google")
 
 (use-package clang-format
   :config (add-hook 'before-save-hook
-                    (lambda ()
-                        (when (eq major-mode 'c++-mode)
-                          (clang-format-buffer)))))
+        (lambda ()
+      (when (eq major-mode 'c++-mode)
+        (clang-format-buffer)))))
 
 (use-package markdown-mode
   :defer t)
@@ -138,8 +138,8 @@
 
 (use-package jedi
   :config (progn
-             (add-hook 'python-mode-hook 'jedi:setup)
-             (setq jedi:complete-on-dot t)))
+       (add-hook 'python-mode-hook 'jedi:setup)
+       (setq jedi:complete-on-dot t)))
 
 (use-package go-mode
   :defer t
@@ -172,6 +172,9 @@
   :ensure t
   :init (global-flycheck-mode))
 
+(use-package ttl-mode
+  :defer t)
+
 ;; non-elpa el files
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
@@ -201,9 +204,9 @@
 
 ;; BACKUP files
 (setq backup-directory-alist
-          `((".*" . ,temporary-file-directory)))
+    `((".*" . ,temporary-file-directory)))
     (setq auto-save-file-name-transforms
-          `((".*" ,temporary-file-directory t)))
+    `((".*" ,temporary-file-directory t)))
 
 ;; Coding modes
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -237,7 +240,11 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
+<<<<<<< HEAD
     (auctex flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
+=======
+    (ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
+>>>>>>> 7bf7cd359a47d46aeae79f4a08f7cfc9a9ad6b58
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
