@@ -29,6 +29,7 @@
 (package-initialize)
 (require 'package)
 (add-to-list 'load-path "~/.emacs.d/use-package")
+(add-to-list 'load-path "~/.emacs.d/my-packages")
 (require 'use-package)
 (add-to-list 'package-archives
      '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -44,6 +45,22 @@
 
 
 ;; PACKAGES
+(use-package auctex
+  :init
+  (progn
+    (setq TeX-auto-save t)
+    (setq TeX-parse-self t)
+    (setq-default TeX-master nil)
+    (setq TeX-PDF-mode t)
+    (setq reftex-plug-into-AUCTeX t))
+  :config
+  (progn
+    (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+    (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+    (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+    (add-hook 'LaTeX-mode-hook 'turn-on-reftex))
+  :defer t)
+
 (use-package smex
   :bind (("M-x" . smex)
    ("M-X" . smex-major-mode-commands)))
@@ -158,6 +175,27 @@
 (use-package ttl-mode
   :defer t)
 
+;; Org mode
+(require 'org)
+(require 'org-bullets)
+
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-switchb)
+
+(setq org-todo-keywords
+      '((sequence "TODO" "|" "DONE" "DROPPED")))
+(setq org-log-done 'time)
+(setq org-default-notes-file (concat org-directory "/refile-local.org"))
+(setq org-agenda-files '("~/Dropbox/org"))
+
+(add-hook 'org-mode-hook
+          '(lambda ()
+             (progn
+               (org-bullets-mode t))))
+
+
 ;; line utils
 (defun duplicate-line()
   (interactive)
@@ -196,6 +234,7 @@
 (add-to-list 'auto-mode-alist '("\\.ttl" . ttl-mode))
 
 (setq inhibit-startup-screen t)
+(add-to-list 'initial-frame-alist '(fullscreen . fullscreen))
 
 ;; General
 (setq-default indent-tabs-mode nil)
@@ -222,7 +261,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
+    (ttl-mode smex protobuf-mode markdown-mode magit json-mode jedi go-imports go-guru go-errcheck go-autocomplete flycheck exec-path-from-shell editorconfig clang-format auctex ace-jump-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
