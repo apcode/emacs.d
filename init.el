@@ -250,9 +250,6 @@
 
 (setq tramp-default-method "sshx")
 
-;; setup initial frame alist
-(add-to-list 'initial-frame-alist '(fullscreen . fullscreen))
-
 ;; save and restore entire session
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
