@@ -79,24 +79,24 @@
 
 (setq ibuffer-saved-filter-groups
       (quote (("default"
-         ("emacs" (or
-       (name . "^\\*scratch\\*$")
-       (name . "^\\*Messages\\*$")
-       (name . ".*\\.el$")))
-         ("build" (or
-       (name . "BUILD")
-       (name . "WORKSPACE")))
-         ("proto" (name . ".*\\.proto$"))
-         ("dired" (mode . dired-mode))
-         ("h" (or
-         (name . ".*\\.h$")
-         (name . ".*\\.hpp$")))
-         ("cc" (or
-          (name . ".*\\.cpp$")
-          (name . ".*\\.cc$")
-          (name . ".*\\.c$")))
-         ("py" (mode . "python-mode"))
-         ("go" (name . ".*\\.go$"))))))
+               ("emacs" (or
+                         (name . "^\\*scratch\\*$")
+                         (name . "^\\*Messages\\*$")
+                         (name . ".*\\.el$")))
+               ("build" (or
+                         (name . "^BUILD$")
+                         (name . "^WORKSPACE$")))
+               ("proto" (name . ".*\\.proto$"))
+               ("dired" (mode . dired-mode))
+               ("h" (or
+                     (name . ".*\\.h$")
+                     (name . ".*\\.hpp$")))
+               ("cc" (or
+                      (name . ".*\\.cpp$")
+                      (name . ".*\\.cc$")
+                      (name . ".*\\.c$")))
+               ("py" (name . ".*\\.py$"))
+               ("go" (name . ".*\\.go$"))))))
 
 (use-package ace-jump-mode
   :bind ("C-;" . ace-jump-mode))
@@ -136,10 +136,10 @@
 (use-package protobuf-mode
   :defer t)
 
-(use-package jedi
-  :config (progn
-       (add-hook 'python-mode-hook 'jedi:setup)
-       (setq jedi:complete-on-dot t)))
+;;(use-package jedi
+;;  :config (progn
+;;       (add-hook 'python-mode-hook 'jedi:setup)
+;;       (setq jedi:complete-on-dot t)))
 
 (use-package go-mode
   :defer t
@@ -253,6 +253,7 @@
 (add-to-list 'auto-mode-alist '("BUILD" . python-mode))
 (add-to-list 'auto-mode-alist '("\\.BUILD\\'" . python-mode))
 (add-to-list 'auto-mode-alist '("WORKSPACE" . python-mode))
+(add-to-list 'auto-mode-alist '("\\.ttl" . ttl-mode))
 
 (setq inhibit-startup-screen t)
 (add-to-list 'initial-frame-alist '(fullscreen . fullscreen))
