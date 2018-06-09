@@ -190,6 +190,28 @@
 (setq org-default-notes-file (concat org-directory "/refile-local.org"))
 (setq org-agenda-files '("~/Dropbox/org"))
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(
+   (emacs-lisp . t)
+   (org . t)
+   (sh . t)
+   (C . t)
+   (python . t)
+   (gnuplot . t)
+   (octave . t)
+   (R . t)
+   (dot . t)
+   (awk . t)
+   ))
+
+(setq org-src-fontify-natively t)
+(setq org-src-tab-acts-natively t)
+
+(add-to-list 'ispell-skip-region-alist '(":\\(PROPERTIES\\|LOGBOOK\\):" . ":END:"))
+(add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_SRC" . "#\\+END_SRC"))
+(add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_EXAMPLE" . "#\\+END_EXAMPLE"))
+
 (add-hook 'org-mode-hook
           '(lambda ()
              (progn
