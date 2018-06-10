@@ -184,11 +184,16 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
 
+(setq org-directory "~/Dropbox/org")
 (setq org-todo-keywords
       '((sequence "TODO" "|" "DONE" "DROPPED")))
 (setq org-log-done 'time)
 (setq org-default-notes-file (concat org-directory "/refile-local.org"))
-(setq org-agenda-files '("~/Dropbox/org"))
+(setq org-agenda-files
+      '("~/Dropbox/org"
+        "~/Workspace/apcode/active_inference/org"))
+(setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
+(setq org-archive-location (concat org-directory "/done.org_archive::"))
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -242,7 +247,7 @@
 (global-set-key (kbd "C-c C-l") 'copy-line)
 
 ;; BACKUP files
-(setq backup-directory-alist
+(setq baccrakup-directory-alist
     `((".*" . ,temporary-file-directory)))
     (setq auto-save-file-name-transforms
     `((".*" ,temporary-file-directory t)))
@@ -267,6 +272,7 @@
 (global-linum-mode t)
 (show-paren-mode t)
 (electric-pair-mode t)
+(setq-default fill-column 80)
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
