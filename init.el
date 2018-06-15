@@ -218,13 +218,12 @@
 (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_EXAMPLE" . "#\\+END_EXAMPLE"))
 
 (add-hook 'org-mode-hook
-          '(lambda ()
-             (progn
-               (org-bullets-mode t))))
-
+          (progn
+            (org-bullets-mode t)
+            'turn-on-auto-fill))
 
 ;; line utils
-(defun duplicate-line()
+(defun duplicate-line ()
   (interactive)
   (move-beginning-of-line 1)
   (kill-line)
@@ -234,7 +233,7 @@
   (yank)
 )
 
-(defun copy-line()
+(defun copy-line ()
   (interactive)
   (move-beginning-of-line 1)
   (kill-line)
