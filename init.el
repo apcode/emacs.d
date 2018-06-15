@@ -79,13 +79,14 @@
 
 (setq ibuffer-saved-filter-groups
       (quote (("default"
+               ("org" (name . ".*\\.org$"))
                ("emacs" (or
                          (name . "^\\*scratch\\*$")
                          (name . "^\\*Messages\\*$")
                          (name . ".*\\.el$")))
                ("build" (or
-                         (name . "^BUILD$")
-                         (name . "^WORKSPACE$")))
+                         (name . "^BUILD")
+                         (name . "^WORKSPACE")))
                ("proto" (name . ".*\\.proto$"))
                ("dired" (mode . dired-mode))
                ("h" (or
@@ -258,7 +259,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ttl-mode smex protobuf-mode markdown-mode magit json-mode jedi go-imports go-guru go-errcheck go-autocomplete flycheck exec-path-from-shell editorconfig clang-format auctex ace-jump-mode))))
+    (auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
