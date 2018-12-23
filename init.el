@@ -176,6 +176,16 @@
 (use-package ttl-mode
   :defer t)
 
+(use-package web-mode
+  :defer t)
+
+(use-package vue-mode
+  :defer t)
+
+;; SBCL
+(load (expand-file-name "~/quicklisp/slime-helper.el"))
+(setq inferior-lisp-program "/usr/local/bin/sbcl")
+
 ;; Org mode
 (require 'org)
 (require 'org-bullets)
@@ -247,7 +257,7 @@
 (global-set-key (kbd "C-c C-l") 'copy-line)
 
 ;; BACKUP files
-(setq baccrakup-directory-alist
+(setq backup-directory-alist
     `((".*" . ,temporary-file-directory)))
     (setq auto-save-file-name-transforms
     `((".*" ,temporary-file-directory t)))
@@ -286,7 +296,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
+    (vue-mode auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
