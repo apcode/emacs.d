@@ -206,20 +206,20 @@
 (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
 (setq org-archive-location (concat org-directory "/done.org_archive::"))
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '(
-   (emacs-lisp . t)
-   (org . t)
-   (sh . t)
-   (C . t)
-   (python . t)
-   (gnuplot . t)
-   (octave . t)
-   (R . t)
-   (dot . t)
-   (awk . t)
-   ))
+;;(org-babel-do-load-languages
+;; 'org-babel-load-languages
+;; '(
+;;   (emacs-lisp . t)
+;;   (org . t)
+;;   (sh . t)
+;;   (C . t)
+;;   (python . t)
+;;   (gnuplot . t)
+;;   (octave . t)
+;;   (R . t)
+;;   (dot . t)
+;;   (awk . t)
+;;   ))
 
 (setq org-src-fontify-natively t)
 (setq org-src-tab-acts-natively t)
