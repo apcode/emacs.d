@@ -137,32 +137,32 @@
 (use-package protobuf-mode
   :defer t)
 
-;;(use-package jedi
-;;  :config (progn
-;;       (add-hook 'python-mode-hook 'jedi:setup)
-;;       (setq jedi:complete-on-dot t)))
+(use-package jedi
+ :config (progn
+      (add-hook 'python-mode-hook 'jedi:setup)
+      (setq jedi:complete-on-dot t)))
 
-(use-package go-mode
-  :defer t
-  :init
-  (progn
-    (setq gofmt-command "goimports")
-    (add-hook 'before-save-hook 'gofmt-before-save)
-    (bind-key [remap find-tag] #'godef-jump))
-  :config
-  (add-hook 'go-mode-hook 'electric-pair-mode))
+;; (use-package go-mode
+;;   :defer t
+;;   :init
+;;   (progn
+;;     (setq gofmt-command "goimports")
+;;     (add-hook 'before-save-hook 'gofmt-before-save)
+;;     (bind-key [remap find-tag] #'godef-jump))
+;;   :config
+;;   (add-hook 'go-mode-hook 'electric-pair-mode))
 
-(use-package go-autocomplete
-  :ensure t)
+;; (use-package go-autocomplete
+;;   :ensure t)
 
-(use-package go-errcheck
-  :defer t)
+;; (use-package go-errcheck
+;;   :defer t)
 
-(use-package go-guru
-  :ensure t)
+;; (use-package go-guru
+;;   :ensure t)
 
-(use-package go-imports
-  :defer t)
+;; (use-package go-imports
+;;   :defer t)
 
 ;; Ensure following installed for langs (See flycheck.org)
 ;;   python - flake8
@@ -182,11 +182,21 @@
 (use-package vue-mode
   :defer t)
 
-;; SBCL
-;;(load (expand-file-name "~/quicklisp/slime-helper.el"))
-;;(setq inferior-lisp-program "/usr/local/bin/sbcl")
+(use-package docker
+  :ensure t
+  :bind ("C-c d" . docker))
 
-;; Org mode
+(use-package kubernetes
+  :ensure t
+  :commands (kubernetes-overview))
+
+
+
+;; ;; SBCL
+;; ;;(load (expand-file-name "~/quicklisp/slime-helper.el"))
+;; ;;(setq inferior-lisp-program "/usr/local/bin/sbcl")
+
+;; ;; Org mode
 (require 'org)
 (require 'org-bullets)
 
@@ -206,20 +216,20 @@
 (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
 (setq org-archive-location (concat org-directory "/done.org_archive::"))
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '(
-   (emacs-lisp . t)
-   (org . t)
-   (sh . t)
-   (C . t)
-   (python . t)
-   (gnuplot . t)
-   (octave . t)
-   (R . t)
-   (dot . t)
-   (awk . t)
-   ))
+;; (org-babel-do-load-languages
+;;  'org-babel-load-languages
+;;  '(
+;;    (emacs-lisp . t)
+;;    (org . t)
+;;    (sh . t)
+;;    (C . t)
+;;    (python . t)
+;;    (gnuplot . t)
+;;    (octave . t)
+;;    (R . t)
+;;    (dot . t)
+;;    (awk . t)
+;;    ))
 
 (setq org-src-fontify-natively t)
 (setq org-src-tab-acts-natively t)
@@ -296,7 +306,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (vue-mode auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
+    (kubernetes docker vue-mode auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
