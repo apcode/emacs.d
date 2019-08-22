@@ -190,6 +190,12 @@
   :ensure t
   :commands (kubernetes-overview))
 
+(use-package projectile
+  :ensure t
+  :config
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
 
 
 ;; ;; SBCL
@@ -279,6 +285,7 @@
 (add-to-list 'auto-mode-alist '("\\.BUILD\\'" . python-mode))
 (add-to-list 'auto-mode-alist '("WORKSPACE" . python-mode))
 (add-to-list 'auto-mode-alist '("\\.ttl" . ttl-mode))
+(add-to-list 'auto-mode-alist '("\\.js" . javascript-mode))
 
 (setq inhibit-startup-screen t)
 (add-to-list 'initial-frame-alist '(fullscreen . fullscreen))
@@ -306,7 +313,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (kubernetes docker vue-mode auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
+    (projectile kubernetes docker vue-mode auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
