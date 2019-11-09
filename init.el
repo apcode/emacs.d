@@ -173,6 +173,12 @@
   :ensure t
   :init (global-flycheck-mode))
 
+;;(use-package shell-here
+;;  :bind ("C-c !" . shell-here))
+
+;;(use-package shell-pop
+;;  )
+
 (use-package ttl-mode
   :defer t)
 
@@ -181,6 +187,13 @@
 
 (use-package vue-mode
   :defer t)
+
+(use-package tide
+  :ensure t
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)
+         (before-save . tide-format-before-save)))
 
 ;; SBCL
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
@@ -195,14 +208,13 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
 
-(setq org-directory "~/Dropbox/org")
+(setq org-directory "~/Library/Mobile\ Documents/iCloud~com~appsonthemove~beorg/Documents/org")
 (setq org-todo-keywords
       '((sequence "TODO" "|" "DONE" "DROPPED")))
 (setq org-log-done 'time)
 (setq org-default-notes-file (concat org-directory "/refile-local.org"))
 (setq org-agenda-files
-      '("~/Dropbox/org"
-        "~/Workspace/apcode/active_inference/org"))
+      '("~/Library/Mobile\ Documents/iCloud~com~appsonthemove~beorg/Documents/org"))
 (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
 (setq org-archive-location (concat org-directory "/done.org_archive::"))
 
@@ -252,6 +264,27 @@
   (move-beginning-of-line 1)
 )
 
+;; eshell
+(defun eshell-here ()
+  "Opens up a new shell in the directory associated with the
+current buffer's file. The eshell is renamed to match that
+directory to make multiple eshell windows easier."
+  (interactive)
+  (let* ((parent (if (buffer-file-name)
+                     (file-name-directory (buffer-file-name))
+                   default-directory))
+         (height (/ (window-total-height) 3))
+         (name   (car (last (split-string parent "/" t)))))
+    (split-window-vertically (- height))
+    (other-window 1)
+    (eshell "new")
+    (rename-buffer (concat "*eshell: " name "*"))
+
+    (insert (concat "ls"))
+    (eshell-send-input)))
+
+(bind-key "C-t" 'eshell-here)
+
 ;; util commands
 (global-set-key (kbd "C-c C-d") 'duplicate-line)
 (global-set-key (kbd "C-c C-l") 'copy-line)
@@ -269,6 +302,9 @@
 (add-to-list 'auto-mode-alist '("\\.BUILD\\'" . python-mode))
 (add-to-list 'auto-mode-alist '("WORKSPACE" . python-mode))
 (add-to-list 'auto-mode-alist '("\\.ttl" . ttl-mode))
+(add-to-list 'auto-mode-alist '("\\.js" . javascript-mode))
+(add-to-list 'auto-mode-alist '("\\.ts" . tide-mode))
+(add-to-list 'auto-mode-alist '("\\.ts" . typescript-mode))
 
 (setq inhibit-startup-screen t)
 (add-to-list 'initial-frame-alist '(fullscreen . fullscreen))
@@ -296,7 +332,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (vue-mode auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
+    (shell-pop shell-here vue-mode auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
