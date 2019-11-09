@@ -137,32 +137,32 @@
 (use-package protobuf-mode
   :defer t)
 
-;;(use-package jedi
-;;  :config (progn
-;;       (add-hook 'python-mode-hook 'jedi:setup)
-;;       (setq jedi:complete-on-dot t)))
+(use-package jedi
+ :config (progn
+      (add-hook 'python-mode-hook 'jedi:setup)
+      (setq jedi:complete-on-dot t)))
 
-(use-package go-mode
-  :defer t
-  :init
-  (progn
-    (setq gofmt-command "goimports")
-    (add-hook 'before-save-hook 'gofmt-before-save)
-    (bind-key [remap find-tag] #'godef-jump))
-  :config
-  (add-hook 'go-mode-hook 'electric-pair-mode))
+;; (use-package go-mode
+;;   :defer t
+;;   :init
+;;   (progn
+;;     (setq gofmt-command "goimports")
+;;     (add-hook 'before-save-hook 'gofmt-before-save)
+;;     (bind-key [remap find-tag] #'godef-jump))
+;;   :config
+;;   (add-hook 'go-mode-hook 'electric-pair-mode))
 
-(use-package go-autocomplete
-  :ensure t)
+;; (use-package go-autocomplete
+;;   :ensure t)
 
-(use-package go-errcheck
-  :defer t)
+;; (use-package go-errcheck
+;;   :defer t)
 
-(use-package go-guru
-  :ensure t)
+;; (use-package go-guru
+;;   :ensure t)
 
-(use-package go-imports
-  :defer t)
+;; (use-package go-imports
+;;   :defer t)
 
 ;; Ensure following installed for langs (See flycheck.org)
 ;;   python - flake8
@@ -188,6 +188,7 @@
 (use-package vue-mode
   :defer t)
 
+
 (use-package tide
   :ensure t
   :after (typescript-mode company flycheck)
@@ -199,7 +200,23 @@
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
 
-;; Org mode
+(use-package docker
+  :ensure t
+  :bind ("C-c d" . docker))
+
+(use-package kubernetes
+  :ensure t
+  :commands (kubernetes-overview))
+
+(use-package projectile
+  :ensure t
+  :config
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
+
+
+;; ;; Org mode
 (require 'org)
 (require 'org-bullets)
 
@@ -218,20 +235,20 @@
 (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
 (setq org-archive-location (concat org-directory "/done.org_archive::"))
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '(
-   (emacs-lisp . t)
-   (org . t)
-   (sh . t)
-   (C . t)
-   (python . t)
-   (gnuplot . t)
-   (octave . t)
-   (R . t)
-   (dot . t)
-   (awk . t)
-   ))
+;;(org-babel-do-load-languages
+;; 'org-babel-load-languages
+;; '(
+;;   (emacs-lisp . t)
+;;   (org . t)
+;;   (sh . t)
+;;   (C . t)
+;;   (python . t)
+;;   (gnuplot . t)
+;;   (octave . t)
+;;   (R . t)
+;;   (dot . t)
+;;   (awk . t)
+;;   ))
 
 (setq org-src-fontify-natively t)
 (setq org-src-tab-acts-natively t)
@@ -304,7 +321,7 @@ directory to make multiple eshell windows easier."
 (add-to-list 'auto-mode-alist '("\\.ttl" . ttl-mode))
 (add-to-list 'auto-mode-alist '("\\.js" . javascript-mode))
 (add-to-list 'auto-mode-alist '("\\.ts" . tide-mode))
-(add-to-list 'auto-mode-alist '("\\.ts" . typescript-mode))
+;;(add-to-list 'auto-mode-alist '("\\.ts" . typescript-mode))
 
 (setq inhibit-startup-screen t)
 (add-to-list 'initial-frame-alist '(fullscreen . fullscreen))
@@ -332,7 +349,7 @@ directory to make multiple eshell windows easier."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (shell-pop shell-here vue-mode auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
+    (projectile kubernetes docker vue-mode auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
