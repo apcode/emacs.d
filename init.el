@@ -45,21 +45,21 @@
 
 
 ;; PACKAGES
-(use-package auctex
-  :init
-  (progn
-    (setq TeX-auto-save t)
-    (setq TeX-parse-self t)
-    (setq-default TeX-master nil)
-    (setq TeX-PDF-mode t)
-    (setq reftex-plug-into-AUCTeX t))
-  :config
-  (progn
-    (add-hook 'LaTeX-mode-hook 'visual-line-mode)
-    (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-    (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-    (add-hook 'LaTeX-mode-hook 'turn-on-reftex))
-  :defer t)
+;; (use-package auctex
+;;   :init
+;;   (progn
+;;     (setq TeX-auto-save t)
+;;     (setq TeX-parse-self t)
+;;     (setq-default TeX-master nil)
+;;     (setq TeX-PDF-mode t)
+;;     (setq reftex-plug-into-AUCTeX t))
+;;   :config
+;;   (progn
+;;     (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+;;     (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+;;     (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+;;     (add-hook 'LaTeX-mode-hook 'turn-on-reftex))
+;;   :defer t)
 
 (use-package smex
   :bind (("M-x" . smex)
@@ -189,16 +189,16 @@
   :defer t)
 
 
-(use-package tide
-  :ensure t
-  :after (typescript-mode company flycheck)
-  :hook ((typescript-mode . tide-setup)
-         (typescript-mode . tide-hl-identifier-mode)
-         (before-save . tide-format-before-save)))
+;; (use-package tide
+;;   :ensure t
+;;   :after (typescript-mode company flycheck)
+;;   :hook ((typescript-mode . tide-setup)
+;;          (typescript-mode . tide-hl-identifier-mode)
+;;          (before-save . tide-format-before-save)))
 
 ;; SBCL
-(load (expand-file-name "~/quicklisp/slime-helper.el"))
-(setq inferior-lisp-program "/usr/local/bin/sbcl")
+;;(load (expand-file-name "~/quicklisp/slime-helper.el"))
+;;(setq inferior-lisp-program "/usr/local/bin/sbcl")
 
 (use-package docker
   :ensure t
@@ -225,13 +225,13 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
 
-(setq org-directory "~/Library/Mobile\ Documents/iCloud~com~appsonthemove~beorg/Documents/org")
+(setq org-directory "~/Dropbox/org")
 (setq org-todo-keywords
       '((sequence "TODO" "|" "DONE" "DROPPED")))
 (setq org-log-done 'time)
 (setq org-default-notes-file (concat org-directory "/refile-local.org"))
 (setq org-agenda-files
-      '("~/Library/Mobile\ Documents/iCloud~com~appsonthemove~beorg/Documents/org"))
+      '("~/Dropbox/org"))
 (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
 (setq org-archive-location (concat org-directory "/done.org_archive::"))
 
@@ -340,6 +340,8 @@ directory to make multiple eshell windows easier."
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 (setq tramp-default-method "sshx")
+
+(global-auto-revert-mode t)
 
 ;; save and restore entire session
 (custom-set-variables
