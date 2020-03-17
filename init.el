@@ -300,7 +300,12 @@ directory to make multiple eshell windows easier."
     (insert (concat "ls"))
     (eshell-send-input)))
 
-(bind-key "C-t" 'eshell-here)
+;;(bind-key "C-t" 'eshell-here)
+
+(global-set-key (kbd "M-s-<left>")  'windmove-left)
+(global-set-key (kbd "M-s-<right>") 'windmove-right)
+(global-set-key (kbd "M-s-<up>")    'windmove-up)
+(global-set-key (kbd "M-s-<down>")  'windmove-down)
 
 ;; util commands
 (global-set-key (kbd "C-c C-d") 'duplicate-line)
