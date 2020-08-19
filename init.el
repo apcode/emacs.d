@@ -43,6 +43,7 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/twilight-theme")
 (load-theme 'twilight t)
 
+(set-face-attribute 'default nil :height 140)
 
 ;; PACKAGES
 ;; (use-package auctex
@@ -137,10 +138,13 @@
 (use-package protobuf-mode
   :defer t)
 
-(use-package jedi
- :config (progn
-      (add-hook 'python-mode-hook 'jedi:setup)
-      (setq jedi:complete-on-dot t)))
+(use-package yaml-mode
+  :defer t)
+
+;; (use-package jedi
+;;  :config (progn
+;;       (add-hook 'python-mode-hook 'jedi:setup)
+;;       (setq jedi:complete-on-dot t)))
 
 ;; (use-package go-mode
 ;;   :defer t
@@ -208,12 +212,12 @@
   :ensure t
   :commands (kubernetes-overview))
 
-(use-package projectile
-  :ensure t
-  :config
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode +1))
+;; (use-package projectile
+;;   :ensure t
+;;   :config
+;;   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+;;   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+;;   (projectile-mode +1))
 
 
 ;; ;; Org mode
@@ -300,7 +304,7 @@ directory to make multiple eshell windows easier."
     (insert (concat "ls"))
     (eshell-send-input)))
 
-;;(bind-key "C-t" 'eshell-here)
+(bind-key "C-t" 'eshell-here)
 
 (global-set-key (kbd "M-s-<left>")  'windmove-left)
 (global-set-key (kbd "M-s-<right>") 'windmove-right)
@@ -318,14 +322,17 @@ directory to make multiple eshell windows easier."
     `((".*" ,temporary-file-directory t)))
 
 ;; Coding modes
+(add-to-list 'auto-mode-alist '("\\.txt\\'" . text-mode))
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-mode))
-(add-to-list 'auto-mode-alist '("BUILD" . python-mode))
-(add-to-list 'auto-mode-alist '("\\.BUILD\\'" . python-mode))
-(add-to-list 'auto-mode-alist '("WORKSPACE" . python-mode))
-(add-to-list 'auto-mode-alist '("\\.ttl" . ttl-mode))
-(add-to-list 'auto-mode-alist '("\\.js" . javascript-mode))
-(add-to-list 'auto-mode-alist '("\\.ts" . tide-mode))
+;;(add-to-list 'auto-mode-alist '("BUILD" . python-mode))
+;;(add-to-list 'auto-mode-alist '("\\.BUILD\\'" . python-mode))
+;;(add-to-list 'auto-mode-alist '("WORKSPACE" . python-mode))
+(add-to-list 'auto-mode-alist '("\\.ttl\\'" . ttl-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . javascript-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . tide-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 ;;(add-to-list 'auto-mode-alist '("\\.ts" . typescript-mode))
 
 (setq inhibit-startup-screen t)
@@ -356,7 +363,7 @@ directory to make multiple eshell windows easier."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (projectile kubernetes docker vue-mode auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
+    (yaml-mode projectile kubernetes docker vue-mode auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
