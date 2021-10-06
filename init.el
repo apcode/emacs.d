@@ -90,8 +90,9 @@
 ;; Visual Display
 ;;
 
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-;;(add-to-list 'default-frame-alist '(fullscreen . fullscreen))
+(if (eq system-type 'darwin)
+    (add-to-list 'default-frame-alist '(fullscreen . fullscreen))
+  (add-to-list 'default-frame-alist '(fullscreen . maximized)))
 
 (when (window-system)
   (tool-bar-mode -1)
@@ -114,6 +115,10 @@
           doom-dark+-blue-modeline nil)
     (load-theme chosen-theme)))
 
+(custom-set-faces
+  '(default ((t (:background "#000000"))))
+  '(hl-line ((t (:background "#000000"))))
+  )
 
 (ignore-errors (set-frame-font "Menlo-12"))
 (set-face-attribute 'default nil :height 140)
