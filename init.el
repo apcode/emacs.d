@@ -1,75 +1,207 @@
-;; Added by Package.el.This must come before configurations of
-;; installed packages.Don 't delete this line.  If you don' t want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-
-;; INSTALL TOOLS
-;; Go apps to install:
-;;   errcheck, gocode, godef, goimports, golint, guru, megacheck, unconvert
-;;   See http://dominik.honnef.co/posts/2013/03/writing_go_in_emacs/
+;; init.el
 ;;
-;; go get golang.org/x/tools/cmd/goimports
-;; go get github.com/rogpeppe/godefgo get github.com/rogpeppe/godef
-;; go get -u github.com/nsf/gocode
-;; go get -u github.com/kisielk/errcheck
-;; go get golang.org/x/tools/cmd/guru
-;; go get -u github.com/dougm/goflymake
-;; go get -u github.com/golang/lint/golint
-;; go get github.com/mdempsky/unconvert
-;; go get honnef.co/go/tools/cmd/megacheck
+;; influenced by Patrick Thomsons setyp https://github.com/patrickt
 ;;
-;; Python
-;; pip install flake8
+
+;; Bootstrap
+(require 'package)
+
+(setq package-enable-at-startup nil)
+
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives '("ublt" . "https://elpa.ubolonton.org/packages/"))
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 
 (package-initialize)
-(require 'package)
-(add-to-list 'load-path "~/.emacs.d/use-package")
-(add-to-list 'load-path "~/.emacs.d/my-packages")
-(require 'use-package)
-(add-to-list 'package-archives
-     '("melpa" . "http://melpa.milkbox.net/packages/") t)
-;; (dolist (package '(use-package))
-;;    (unless (package-installed-p package)
-;;      (package-install package)))
 
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(when (boundp 'comp-speed)
+  (setq comp-speed 2))
+
+(setq max-lisp-eval-depth 2000)
+(setq lexical-binding t)
+(setq gc-cons-threshold 100000000)
 (setq use-package-always-ensure t)
 
-;; color-theme
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/twilight-theme")
-(load-theme 'twilight t)
+(setq
+ ;; No need to see GNU agitprop.
+ inhibit-startup-screen t
+ ;; No need to remind me what a scratch buffer is.
+ initial-scratch-message nil
+ ;; Double-spaces after periods is morally wrong.
+ sentence-end-double-space nil
+ ;; Never ding at me, ever.
+ ring-bell-function 'ignore
+ ;; Prompts should go in the minibuffer, not in a GUI.
+ use-dialog-box nil
+ ;; Fix undo in commands affecting the mark.
+ mark-even-if-inactive nil
+ ;; Let C-k delete the whole line.
+ kill-whole-line t
+ ;; search should be case-sensitive by default
+ case-fold-search nil
+ ;; no need to prompt for the read command _every_ time
+ compilation-read-command nil
+ ;; always scroll
+ compilation-scroll-output t
+ ;; my source directory
+ default-directory "~/Workspace")
 
+(setq-default indent-tabs-mode nil)
+
+(defalias 'yes-or-no-p 'y-or-n-p)       ; Accept 'y' in lieu of 'yes'.
+
+
+;; utf-8 always
+(set-charset-priority 'unicode)
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+
+;; Editing Choices
+(delete-selection-mode t)
+(global-display-line-numbers-mode t)
+(column-number-mode)
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
+(setq require-final-newline t)
+
+;; remove backup and auto saves
+(setq
+ make-backup-files nil
+ auto-save-default nil
+ create-lockfiles nil)
+
+;; get rid of the custom variable settings
+(setq custom-file null-device)
+(setq custom-safe-themes t)
+
+;; remove some default key bindings
+(unbind-key "C-z") ;; suspend-frame
+(unbind-key "M-o") ;; facemenu-mode
+
+;;
+;; Visual Display
+;;
+
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;;(add-to-list 'default-frame-alist '(fullscreen . fullscreen))
+
+(when (window-system)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (tooltip-mode -1))
+
+;; color-theme
+;;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/twilight-theme")
+;;(load-theme 'twilight t)
+
+(use-package doom-themes
+  :ensure t
+  :config
+  (let ((chosen-theme 'doom-tomorrow-night))
+    (doom-themes-visual-bell-config)
+    (doom-themes-org-config)
+    (setq doom-challenger-deep-brighter-comments t
+          doom-challenger-deep-brighter-modeline t
+          doom-dark+-blue-modeline nil)
+    (load-theme chosen-theme)))
+
+
+(ignore-errors (set-frame-font "Menlo-12"))
 (set-face-attribute 'default nil :height 140)
 
-;; PACKAGES
-;; (use-package auctex
-;;   :init
-;;   (progn
-;;     (setq TeX-auto-save t)
-;;     (setq TeX-parse-self t)
-;;     (setq-default TeX-master nil)
-;;     (setq TeX-PDF-mode t)
-;;     (setq reftex-plug-into-AUCTeX t))
-;;   :config
-;;   (progn
-;;     (add-hook 'LaTeX-mode-hook 'visual-line-mode)
-;;     (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-;;     (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-;;     (add-hook 'LaTeX-mode-hook 'turn-on-reftex))
-;;   :defer t)
+(use-package all-the-icons)
 
-(use-package smex
-  :bind (("M-x" . smex)
-   ("M-X" . smex-major-mode-commands)))
+(use-package all-the-icons-dired
+  :after all-the-icons
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+;; requires all the icons
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+
+(use-package dimmer
+  :custom (dimmer-fraction 0.1)
+  :config (dimmer-mode))
+
+(show-paren-mode)
+
+(use-package rainbow-delimiters
+  :hook ((prog-mode . rainbow-delimiters-mode)))
+
+(use-package centered-window
+  :ensure t
+  :custom
+  (cwm-centered-window-width 180))
+
+;;(use-package highlight-indent-guides)
+
+(use-package tree-sitter
+  :hook ((ruby-mode . tree-sitter-hl-mode)
+         (js-mode . tree-sitter-hl-mode)
+         (typescript-mode . tree-sitter-hl-mode)
+         (go-mode . tree-sitter-hl-mode)))
+(use-package tree-sitter-langs)
+
+;; dreaded tabs
+;; (use-package centaur-tabs
+;;   :config
+;;   (centaur-tabs-mode t)
+;;   :custom
+;;   (centaur-tabs-gray-out-icons 'buffer)
+;;   (centaur-tabs-style "rounded")
+;;   (centaur-tabs-height 32)
+;;   (centaur-tabs-set-icons t)
+;;   (centaur-tabs-set-modified-marker t)
+;;   (centaur-tabs-modified-marker "●")
+;;   (centaur-tabs-buffer-groups-function #'centaur-tabs-projectile-buffer-groups)
+
+;;   :bind
+;;   (("s-{" . #'centaur-tabs-backward)
+;;    ("s-}" . #'centaur-tabs-forward)))
+
+(use-package multiple-cursors
+  :bind (("C-c m m" . #'mc/edit-lines )
+         ("C-c m d" . #'mc/mark-all-dwim )))
+
+(setq fill-column 80)
+
+(use-package expand-region
+  :bind (("C-c n" . er/expand-region)))
+
+(use-package iedit)
+
+(global-set-key (kbd "M-s-<left>")  'windmove-left)
+(global-set-key (kbd "M-s-<right>") 'windmove-right)
+(global-set-key (kbd "M-s-<up>")    'windmove-up)
+(global-set-key (kbd "M-s-<down>")  'windmove-down)
+
+
+(use-package auto-complete
+  :config (progn
+      (ac-config-default)
+      (global-auto-complete-mode)))
+
+;;
+;; Coding
+;;
 
 (use-package ido
   :config (progn
       (ido-everywhere t)
       (ido-mode t)))
+
+(use-package smex
+  :bind (("M-x" . smex)
+   ("M-X" . smex-major-mode-commands)))
 
 (use-package ibuffer
   :defer t
@@ -100,20 +232,52 @@
                ("py" (name . ".*\\.py$"))
                ("go" (name . ".*\\.go$"))))))
 
-(use-package ace-jump-mode
-  :bind ("C-;" . ace-jump-mode))
+(use-package company
+  :diminish
+  :bind (("C-." . #'company-capf))
+  :bind (:map company-active-map
+         ("C-n" . #'company-select-next)
+         ("C-p" . #'company-select-previous))
+  :hook (prog-mode . company-mode)
+  :custom
+  (company-dabbrev-downcase nil "Don't downcase returned candidates.")
+  (company-show-numbers t "Numbers are helpful.")
+  (company-tooltip-limit 20 "The more the merrier.")
+  (company-tooltip-idle-delay 0.3 "Faster!")
+  (company-async-timeout 20 "Some requests can take a long time. That's fine.")
+  (company-idle-delay 1.5 "Default is way too low.")
+  :config
 
-(use-package exec-path-from-shell
-  :config (progn
-      (exec-path-from-shell-initialize)
-      (exec-path-from-shell-copy-env "GOPATH")))
+  ;; Use the numbers 0-9 to select company completion candidates
+  (let ((map company-active-map))
+    (mapc (lambda (x) (define-key map (format "%d" x)
+                        `(lambda () (interactive) (company-complete-number ,x))))
+          (number-sequence 0 9))))
 
-(use-package auto-complete
-  :config (progn
-      (ac-config-default)
-      (global-auto-complete-mode)))
 
-(setq clang-format-style-option "Google")
+;; Compare to existing LSP config
+(use-package lsp-mode
+  :commands (lsp lsp-execute-code-action)
+  :hook ((go-mode . lsp-deferred)
+         (lsp-mode . lsp-enable-which-key-integration)
+         (lsp-mode . lsp-diagnostics-modeline-mode))
+  :bind ("C-c C-c" . #'lsp-execute-code-action)
+  :custom
+  (lsp-diagnostics-modeline-scope :project)
+  (lsp-file-watch-threshold 5000)
+  (lsp-response-timeout 2)
+  (lsp-ui-doc-mode nil)
+  (lsp-enable-file-watchers nil))
+
+;; (use-package lsp-ui
+;;   :custom
+;;   (lsp-ui-doc-mode nil)
+;;   :after lsp-mode)
+
+(use-package company-lsp
+  :disabled
+  :custom (company-lsp-enable-snippet t)
+  :after (company lsp-mode))
 
 (use-package clang-format
   :config (add-hook 'before-save-hook
@@ -121,11 +285,65 @@
       (when (eq major-mode 'c++-mode)
         (clang-format-buffer)))))
 
-(use-package markdown-mode
-  :defer t)
+(setq clang-format-style-option "Google")
 
-(use-package json-mode
-  :defer t)
+
+;; Terminal and Process
+(use-package vterm
+  :config
+  (defun turn-off-chrome ()
+    (hl-line-mode -1)
+    (display-line-numbers-mode -1))
+  :hook (vterm-mode . turn-off-chrome))
+
+(use-package vterm-toggle
+  :custom
+  (vterm-toggle-fullscreen-p nil "Open a vterm in another window.")
+  (vterm-toggle-scope 'dedicated)
+  :bind (("C-c t" . #'vterm-toggle)
+         :map vterm-mode-map
+         ("s-t" . #'vterm) ; Open up new tabs quickly
+         ))
+
+(defun source-bashrc ()
+      (interactive)
+      (vterm-send-string "source /Users/alan/.bash_profile")
+      (vterm-send-return))
+
+(add-hook 'vterm-mode-hook #'source-bashrc)
+
+
+(use-package yasnippet
+  :defer 3 ;; takes a while to load, so do it async
+  :diminish yas-minor-mode
+  :config (yas-global-mode)
+  :custom (yas-prompt-functions '(yas-completing-prompt)))
+
+(use-package yasnippet-snippets
+  :ensure t)
+
+(electric-pair-mode t)
+
+(use-package blacken
+  :config (add-hook 'before-save-hook
+                    (lambda ()
+                      (when (eq major-mode 'python-mode
+                                (blacken-buffer)))))
+  :hook ((python-mode . blacken-mode)))
+
+(use-package typescript-mode)
+(use-package yaml-mode)
+(use-package dockerfile-mode)
+(use-package protobuf-mode)
+(use-package fish-mode)
+(use-package ttl-mode)
+(use-package web-mode)
+(use-package vue-mode)
+(use-package json-mode)
+
+(use-package markdown-mode
+  :bind (("C-c C-s a" . markdown-table-align))
+  :mode ("\\.md$" . gfm-mode))
 
 (use-package magit
   :bind (("C-x m" . magit-status)))
@@ -135,74 +353,9 @@
   :config
   (editorconfig-mode 1))
 
-(use-package protobuf-mode
-  :defer t)
-
-(use-package yaml-mode
-  :defer t)
-
-;; (use-package jedi
-;;  :config (progn
-;;       (add-hook 'python-mode-hook 'jedi:setup)
-;;       (setq jedi:complete-on-dot t)))
-
-;; (use-package go-mode
-;;   :defer t
-;;   :init
-;;   (progn
-;;     (setq gofmt-command "goimports")
-;;     (add-hook 'before-save-hook 'gofmt-before-save)
-;;     (bind-key [remap find-tag] #'godef-jump))
-;;   :config
-;;   (add-hook 'go-mode-hook 'electric-pair-mode))
-
-;; (use-package go-autocomplete
-;;   :ensure t)
-
-;; (use-package go-errcheck
-;;   :defer t)
-
-;; (use-package go-guru
-;;   :ensure t)
-
-;; (use-package go-imports
-;;   :defer t)
-
-;; Ensure following installed for langs (See flycheck.org)
-;;   python - flake8
-;;   C++ - clang, and/or cppcheck
-;;   go -  gofmt, golint, go-errcheck, go-unconvert, go-megacheck
-;;
 (use-package flycheck
   :ensure t
   :init (global-flycheck-mode))
-
-;;(use-package shell-here
-;;  :bind ("C-c !" . shell-here))
-
-;;(use-package shell-pop
-;;  )
-
-(use-package ttl-mode
-  :defer t)
-
-(use-package web-mode
-  :defer t)
-
-(use-package vue-mode
-  :defer t)
-
-
-;; (use-package tide
-;;   :ensure t
-;;   :after (typescript-mode company flycheck)
-;;   :hook ((typescript-mode . tide-setup)
-;;          (typescript-mode . tide-hl-identifier-mode)
-;;          (before-save . tide-format-before-save)))
-
-;; SBCL
-;;(load (expand-file-name "~/quicklisp/slime-helper.el"))
-;;(setq inferior-lisp-program "/usr/local/bin/sbcl")
 
 (use-package docker
   :ensure t
@@ -212,17 +365,42 @@
   :ensure t
   :commands (kubernetes-overview))
 
-;; (use-package projectile
-;;   :ensure t
-;;   :config
-;;   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-;;   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-;;   (projectile-mode +1))
+(use-package eglot
+  :config
+  (add-to-list 'eglot-server-programs
+               '((c++-mode c-mode) . ("clangd")))
+  :hook
+  ((c-mode . eglot-ensure)
+  (c++-mode . eglot-ensure)
+  (python-mode . eglot-ensure)))
 
+;; eglot format on save
+(defun my-eglot-mode-before-save-hook ()
+  "Eglot before saving."
+  (when (or (eq major-mode 'c++-mode)
+            (eq major-mode 'c-mode)
+            (eq major-mode 'python-mode))
+    (eglot-format)))
 
-;; ;; Org mode
+(add-hook 'before-save-hook #'my-eglot-mode-before-save-hook)
+
+(use-package restclient
+  :mode ("\\.restclient$" . restclient-mode))
+
+(require 'tramp)
+(setq tramp-default-method "ssh")
+
+(global-auto-revert-mode t)
+
+(use-package exec-path-from-shell
+  :config (progn
+      (exec-path-from-shell-initialize)
+      (exec-path-from-shell-copy-env "GOPATH")))
+
+;;
+;; ORG
+;;
 (require 'org)
-(require 'org-bullets)
 
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
@@ -239,21 +417,6 @@
 (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
 (setq org-archive-location (concat org-directory "/done.org_archive::"))
 
-;;(org-babel-do-load-languages
-;; 'org-babel-load-languages
-;; '(
-;;   (emacs-lisp . t)
-;;   (org . t)
-;;   (sh . t)
-;;   (C . t)
-;;   (python . t)
-;;   (gnuplot . t)
-;;   (octave . t)
-;;   (R . t)
-;;   (dot . t)
-;;   (awk . t)
-;;   ))
-
 (setq org-src-fontify-natively t)
 (setq org-src-tab-acts-natively t)
 
@@ -263,110 +426,19 @@
 
 (add-hook 'org-mode-hook
           (progn
-            (org-bullets-mode t)
             'turn-on-auto-fill))
 
-;; line utils
-(defun duplicate-line ()
-  (interactive)
-  (move-beginning-of-line 1)
-  (kill-line)
-  (yank)
-  (open-line 1)
-  (next-line 1)
-  (yank)
-)
+;;
+;; Startup
+;;
 
-(defun copy-line ()
-  (interactive)
-  (move-beginning-of-line 1)
-  (kill-line)
-  (yank)
-  (move-beginning-of-line 1)
-)
+(defun my-default-window-setup ()
+  "Called by `emacs-startup-hook' to set up my initial window configuration."
 
-;; eshell
-(defun eshell-here ()
-  "Opens up a new shell in the directory associated with the
-current buffer's file. The eshell is renamed to match that
-directory to make multiple eshell windows easier."
-  (interactive)
-  (let* ((parent (if (buffer-file-name)
-                     (file-name-directory (buffer-file-name))
-                   default-directory))
-         (height (/ (window-total-height) 3))
-         (name   (car (last (split-string parent "/" t)))))
-    (split-window-vertically (- height))
-    (other-window 1)
-    (eshell "new")
-    (rename-buffer (concat "*eshell: " name "*"))
+  (split-window-right)
+  (other-window 1)
+  (other-window 1))
 
-    (insert (concat "ls"))
-    (eshell-send-input)))
+(add-hook 'emacs-startup-hook #'my-default-window-setup)
 
-(bind-key "C-t" 'eshell-here)
-
-(global-set-key (kbd "M-s-<left>")  'windmove-left)
-(global-set-key (kbd "M-s-<right>") 'windmove-right)
-(global-set-key (kbd "M-s-<up>")    'windmove-up)
-(global-set-key (kbd "M-s-<down>")  'windmove-down)
-
-;; util commands
-(global-set-key (kbd "C-c C-d") 'duplicate-line)
-(global-set-key (kbd "C-c C-l") 'copy-line)
-
-;; BACKUP files
-(setq backup-directory-alist
-    `((".*" . ,temporary-file-directory)))
-    (setq auto-save-file-name-transforms
-    `((".*" ,temporary-file-directory t)))
-
-;; Coding modes
-(add-to-list 'auto-mode-alist '("\\.txt\\'" . text-mode))
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-(add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-mode))
-;;(add-to-list 'auto-mode-alist '("BUILD" . python-mode))
-;;(add-to-list 'auto-mode-alist '("\\.BUILD\\'" . python-mode))
-;;(add-to-list 'auto-mode-alist '("WORKSPACE" . python-mode))
-(add-to-list 'auto-mode-alist '("\\.ttl\\'" . ttl-mode))
-(add-to-list 'auto-mode-alist '("\\.js\\'" . javascript-mode))
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . tide-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-;;(add-to-list 'auto-mode-alist '("\\.ts" . typescript-mode))
-
-(setq inhibit-startup-screen t)
-(add-to-list 'initial-frame-alist '(fullscreen . fullscreen))
-
-;; General
-(setq-default indent-tabs-mode nil)
-(menu-bar-mode t)
-(tool-bar-mode -1)
-(setq-default default-tab-width 2)
-(column-number-mode t)
-(global-linum-mode t)
-(show-paren-mode t)
-(electric-pair-mode t)
-(setq-default fill-column 80)
-
-(add-hook 'before-save-hook 'whitespace-cleanup)
-
-(setq tramp-default-method "sshx")
-
-(global-auto-revert-mode t)
-
-;; save and restore entire session
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (yaml-mode projectile kubernetes docker vue-mode auctex ttl-mode flycheck go-imports go-guru go-errcheck go-autocomplete go-mode magit markdown-mode clang-format auto-complete exec-path-from-shell ace-jump-mode smex json-mode))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;;; init.el ends here
