@@ -115,16 +115,18 @@
           doom-dark+-blue-modeline nil)
     (load-theme chosen-theme)))
 
+(window-divider-mode t)
+
 (custom-set-faces
   '(default ((t (:background "#101010"))))
   '(hl-line ((t (:background "#101010"))))
+  '(mode-line ((t (:background "dark slate gray" :foreground "white"))))
+  '(mode-line-inactive ((t (:background nil))))
+  '(window-divider ((t (:foreground "dim gray"))))
   )
 
 (ignore-errors (set-frame-font "Menlo-12"))
 (set-face-attribute 'default nil :height 140)
-(set-face-background 'mode-line "dark slate gray")
-(set-face-background 'mode-line-inactive "dim gray")
-(set-face-foreground 'mode-line "white")
 
 (use-package all-the-icons)
 
