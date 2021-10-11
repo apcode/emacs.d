@@ -122,6 +122,9 @@
 
 (ignore-errors (set-frame-font "Menlo-12"))
 (set-face-attribute 'default nil :height 140)
+(set-face-background 'mode-line "dark slate gray")
+(set-face-background 'mode-line-inactive "dim gray")
+(set-face-foreground 'mode-line "white")
 
 (use-package all-the-icons)
 
