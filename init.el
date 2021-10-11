@@ -116,8 +116,8 @@
     (load-theme chosen-theme)))
 
 (custom-set-faces
-  '(default ((t (:background "#000000"))))
-  '(hl-line ((t (:background "#000000"))))
+  '(default ((t (:background "#101010"))))
+  '(hl-line ((t (:background "#101010"))))
   )
 
 (ignore-errors (set-frame-font "Menlo-12"))
