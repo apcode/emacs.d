@@ -122,7 +122,7 @@
   '(hl-line ((t (:background "#101010"))))
   '(mode-line ((t (:background "dark slate gray" :foreground "white"))))
   '(mode-line-inactive ((t (:background nil))))
-  '(window-divider ((t (:foreground "dim gray"))))
+  '(window-divider ((t (:foreground "gray10"))))
   )
 
 (ignore-errors (set-frame-font "Menlo-12"))
