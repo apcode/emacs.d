@@ -318,7 +318,7 @@
 
 (defun source-bashrc ()
       (interactive)
-      (vterm-send-string "source /Users/alan/.bash_profile")
+      (vterm-send-string "source ~/.bashrc")
       (vterm-send-return))
 
 (add-hook 'vterm-mode-hook #'source-bashrc)
