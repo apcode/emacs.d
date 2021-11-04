@@ -121,7 +121,8 @@
   '(default ((t (:background "#101010"))))
   '(hl-line ((t (:background "#101010"))))
   '(mode-line ((t (:background "dark slate gray" :foreground "white"))))
-  '(mode-line-inactive ((t (:background nil))))
+  '(mode-line-inactive ((t (:background "#494949"))))
+  '(mode-line-inactive ((t (:foreground "#cccccc"))))
   '(window-divider ((t (:foreground "gray10"))))
   )
 
