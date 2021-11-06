@@ -100,6 +100,9 @@
   (tooltip-mode -1)
   (menu-bar-mode -1))
 
+(use-package transpose-frame
+  :ensure t)
+
 ;; color-theme
 ;;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/twilight-theme")
 ;;(load-theme 'twilight t)
