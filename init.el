@@ -6,7 +6,23 @@
 ;; Bootstrap
 (require 'package)
 
-(setq package-enable-at-startup nil)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+;;(setq package-enable-at-startup nil)
+(straight-use-package 'use-package)
+(use-package straight
+  :custom (straight-use-package-by-default t))
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
@@ -100,9 +116,6 @@
   (tooltip-mode -1)
   (menu-bar-mode -1))
 
-(use-package transpose-frame
-  :ensure t)
-
 ;; color-theme
 ;;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/twilight-theme")
 ;;(load-theme 'twilight t)
@@ -124,8 +137,7 @@
   '(default ((t (:background "#101010"))))
   '(hl-line ((t (:background "#101010"))))
   '(mode-line ((t (:background "dark slate gray" :foreground "white"))))
-  '(mode-line-inactive ((t (:background "#494949"))))
-  '(mode-line-inactive ((t (:foreground "#cccccc"))))
+  '(mode-line-inactive ((t (:background nil))))
   '(window-divider ((t (:foreground "gray10"))))
   )
 
@@ -205,6 +217,14 @@
       (ac-config-default)
       (global-auto-complete-mode)))
 
+(use-package projectile
+  :ensure t
+  :init
+  (projectile-mode +1)
+  :bind (:map projectile-mode-map
+              ("s-p" . projectile-command-map)
+              ("C-c p" . projectile-command-map)))
+
 ;;
 ;; Coding
 ;;
@@ -245,7 +265,7 @@
                       (name . ".*\\.cc$")
                       (name . ".*\\.c$")))
                ("py" (name . ".*\\.py$"))
-               ("go" (name . ".*\\.go$"))))))
+               ("sh" (name . ".*\\.sh$"))))))
 
 (use-package company
   :diminish
@@ -268,7 +288,6 @@
     (mapc (lambda (x) (define-key map (format "%d" x)
                         `(lambda () (interactive) (company-complete-number ,x))))
           (number-sequence 0 9))))
-
 
 ;; Compare to existing LSP config
 (use-package lsp-mode
@@ -302,6 +321,13 @@
 
 (setq clang-format-style-option "Google")
 
+(straight-use-package 'gptel)
+;; OPTIONAL configuration
+(setq
+ gptel-model "gemini-pro"
+ gptel-backend (gptel-make-gemini "Gemini"
+                 :key "AIzaSyDW2zt56oCgJAy4uOrX0CUf6rcVW8rF6NQ"
+                 :stream t))
 
 ;; Terminal and Process
 (use-package vterm
@@ -346,6 +372,20 @@
                                 (blacken-buffer)))))
   :hook ((python-mode . blacken-mode)))
 
+(use-package conda
+  :config
+  (conda-env-initialize-interactive-shells)
+  (conda-env-autoactivate-mode t)
+  (setq conda-anaconda-home "/home/alan/anaconda3")
+  (setq conda-env-home-directory "/home/alan/anaconda3"))
+
+(use-package python-pytest
+  :straight (:host github :repo "wbolster/emacs-python-pytest" :files ("python-pytest.el"))
+  :bind ("C-c y" . python-pytest-dispatch))
+
+(when (executable-find "ipython")
+  (setq python-shell-interpreter "ipython"))
+
 (use-package typescript-mode)
 (use-package yaml-mode)
 (use-package dockerfile-mode)
@@ -371,6 +411,9 @@
 (use-package flycheck
   :ensure t
   :init (global-flycheck-mode))
+
+(use-package flycheck-projectile
+  :ensure t)
 
 (use-package docker
   :ensure t
@@ -412,10 +455,46 @@
       (exec-path-from-shell-initialize)
       (exec-path-from-shell-copy-env "GOPATH")))
 
+;; ChatGPT
+(use-package deferred
+  :ensure t)
+;;  :straight (:host github :repo "kiwanami/emacs-deferred" :files ("deferred.el" "concurrent.el")))
+
+(use-package ctable
+  :straight (:host github :repo "kiwanami/emacs-ctable" :files ("ctable.el")))
+
+(use-package epc
+  :straight (:host github :repo "kiwanami/emacs-epc" :files ("epc.el")))
+
+(require 'epc)
+
+(use-package chatgpt
+  :straight (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el"))
+  :init
+  (require 'python)
+  (setq python-interpreter "python3")
+  (setq chatgpt-repo-path "~/.emacs.d/straight/repos/ChatGPT.el/")
+  :bind ("C-c q" . chatgpt-query))
+
+;; (setq chatgpt-query-format-string-map '(
+;;                                         ;; ChatGPT.el defaults
+;;                                         ("doc" . "Please write the documentation for the following function.\n\n%s")
+;;                                         ("bug" . "There is a bug in the following function, please help me fix it.\n\n%s")
+;;                                         ("understand" . "What does the following function do?\n\n%s")
+;;                                         ("improve" . "Please improve the following code.\n\n%s")
+;;                                         ;; your new prompt
+;;                                         ("my-custom-type" . "My custom prompt.\n\n%s")))
+
 ;;
 ;; ORG
 ;;
 (require 'org)
+
+(use-package python-isort
+  :ensure t)
+
+(add-hook 'python-mode-hook 'python-isort-on-save-mode)
+
 
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
@@ -426,7 +505,7 @@
 (setq org-todo-keywords
       '((sequence "TODO" "|" "DONE" "DROPPED")))
 (setq org-log-done 'time)
-(setq org-default-notes-file (concat org-directory "/refile-local.org"))
+(setq org-default-notes-file (concat org-directory "/refile-beorg.org"))
 (setq org-agenda-files
       '("~/Dropbox/org"))
 (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
