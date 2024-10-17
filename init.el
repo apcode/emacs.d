@@ -391,7 +391,6 @@
 (use-package dockerfile-mode)
 (use-package protobuf-mode)
 (use-package fish-mode)
-(use-package ttl-mode)
 (use-package web-mode)
 (use-package vue-mode)
 (use-package json-mode)
